@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseServerError, HttpResponseRedirect
 from rest_framework import status
 from allauth.socialaccount import providers
+from django.conf import settings
 
 
 class DjamLogoutView(AllauthLogout):
@@ -34,7 +35,7 @@ class DjamLogoutView(AllauthLogout):
             if r.status_code == status.HTTP_200_OK:
                 response = super(DjamLogoutView, self).post(*args, **kwargs)
                 if response.status_code == status.HTTP_302_FOUND:
-                    r = HttpResponseRedirect(r.url)
+                    r = HttpResponseRedirect(settings.LOGIN_URL)
                     r.delete_cookie('oauth2server_sessionid')
                     return r
                 else:
