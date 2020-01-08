@@ -2,9 +2,9 @@ import requests
 from allauth.account.views import LogoutView as AllauthLogout
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.providers.oauth2.views import OAuth2CallbackView, OAuth2LoginView
+from djam_allauth_client.adapters import DjamAdapter
 from django.shortcuts import redirect, render
 from django.http import HttpResponseServerError, HttpResponseRedirect
-from mps_geonode.account.iam_utils import DjamAdapter
 from rest_framework import status
 from allauth.socialaccount import providers
 
