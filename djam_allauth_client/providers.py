@@ -1,5 +1,4 @@
 from allauth.account.models import EmailAddress
-from allauth.socialaccount import providers
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
@@ -33,4 +32,4 @@ class DjamProvider(OAuth2Provider):
 
 
 
-providers.registry.register(DjamProvider)
+
