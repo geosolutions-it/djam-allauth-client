@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='djam_allauth_client',
-    version='0.0.1',
+    version='0.0.2',
     author='Piotr Dankowski',
     author_email='dankowski.revolve@gmail.com',
     description='Set of classes to allow allauth use geosolutoins oauth2 id provider',
