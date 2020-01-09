@@ -36,7 +36,7 @@ class DjamLogoutView(AllauthLogout):
                 response = super(DjamLogoutView, self).post(*args, **kwargs)
                 if response.status_code == status.HTTP_302_FOUND:
                     r = HttpResponseRedirect(settings.LOGIN_URL)
-                    r.delete_cookie('oauth2server_sessionid')
+                    r.delete_cookie(settings.DJAM_SESSION_COOKIE_NAME)
                     return r
                 else:
                     return response
