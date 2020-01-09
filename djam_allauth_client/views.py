@@ -8,7 +8,6 @@ from djam_allauth_client.adapters import DjamAdapter
 from django.shortcuts import redirect, render
 from django.http import HttpResponseServerError, HttpResponseRedirect
 from rest_framework import status
-from allauth.socialaccount import providers
 from django.conf import settings
 
 
@@ -47,4 +46,3 @@ oauth2_login = OAuth2LoginView.adapter_view(DjamAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(DjamAdapter)
 djam_logout = DjamLogoutView.adapter_view(DjamAdapter)
 
-providers.registry.register(DjamProvider)
