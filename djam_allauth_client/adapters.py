@@ -1,6 +1,6 @@
 import requests
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
-from djam_allauth_client.providers import DjamProvider
+from djam_allauth_client.provider import DjamProvider
 from djam_allauth_client import provider
 
 

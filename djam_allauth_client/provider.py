@@ -20,7 +20,7 @@ class DjamAccount(ProviderAccount):
 
 class DjamProvider(OAuth2Provider):
     id = 'djamauthprovider'
-    name = settings.DJAM_PROVIDER_NAME
+    name = DJAM_PROVIDER_NAME
     account_class = DjamAccount
 
     def extract_uid(self, data):
