@@ -2,14 +2,13 @@ import requests
 from allauth.account.views import LogoutView as AllauthLogout
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.providers.oauth2.views import OAuth2CallbackView, OAuth2LoginView
-from djam_allauth_client.providers import DjamProvider
-
 from djam_allauth_client.adapters import DjamAdapter
 from django.shortcuts import redirect, render
 from django.http import HttpResponseServerError, HttpResponseRedirect
 from rest_framework import status
-from allauth.socialaccount import providers
 from django.conf import settings
+
+from djam_allauth_client.provider import DJAM_SESSION_COOKIE_NAME
 
 
 class DjamLogoutView(AllauthLogout):
@@ -36,7 +35,7 @@ class DjamLogoutView(AllauthLogout):
                 response = super(DjamLogoutView, self).post(*args, **kwargs)
                 if response.status_code == status.HTTP_302_FOUND:
                     r = HttpResponseRedirect(settings.LOGIN_URL)
-                    r.delete_cookie(settings.DJAM_SESSION_COOKIE_NAME)
+                    r.delete_cookie(DJAM_SESSION_COOKIE_NAME)
                     return r
                 else:
                     return response
@@ -47,4 +46,3 @@ oauth2_login = OAuth2LoginView.adapter_view(DjamAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(DjamAdapter)
 djam_logout = DjamLogoutView.adapter_view(DjamAdapter)
 
-providers.registry.register(DjamProvider)

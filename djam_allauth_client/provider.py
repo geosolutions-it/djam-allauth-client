@@ -3,13 +3,24 @@ from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
 
+
+social_config = getattr(
+    settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
+
+DJAM_DOMAIN = social_config.get('DJAM_DOMAIN', 'localhost:8800')
+DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN', 'http')
+DJAM_OPENID_PREFIX = social_config.get('DJAM_DOMAIN', 'openid')
+DJAM_PROVIDER_NAME = social_config.get('DJAM_DOMAIN', 'Mapstand signin service')
+DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_DOMAIN', 'oauth2server_sessionid')
+
+
 class DjamAccount(ProviderAccount):
     pass
 
 
 class DjamProvider(OAuth2Provider):
     id = 'djamauthprovider'
-    name = settings.DJAM_PROVIDER_NAME
+    name = DJAM_PROVIDER_NAME
     account_class = DjamAccount
 
     def extract_uid(self, data):
@@ -31,5 +42,5 @@ class DjamProvider(OAuth2Provider):
         return scope
 
 
-
+provider_classes = [DjamProvider]
 

@@ -1,19 +1,19 @@
 import requests
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
-from django.conf import settings
-from djam_allauth_client.providers import DjamProvider
+from djam_allauth_client.provider import DjamProvider
+from djam_allauth_client import provider
 
 
 class DjamAdapter(OAuth2Adapter):
     provider_id = DjamProvider.id
-    access_token_url = '{}://{}/{}/token'.format(settings.DJAM_DOMAIN_SCHEMA, settings.DJAM_DOMAIN,
-                                                 settings.DJAM_OPENID_PREFIX)
-    authorize_url = '{}://{}/{}/authorize'.format(settings.DJAM_DOMAIN_SCHEMA, settings.DJAM_DOMAIN,
-                                                  settings.DJAM_OPENID_PREFIX)
-    profile_url = '{}://{}/{}/userinfo'.format(settings.DJAM_DOMAIN_SCHEMA, settings.DJAM_DOMAIN,
-                                               settings.DJAM_OPENID_PREFIX)
-    end_sesion = '{}://{}/{}/end-session'.format(settings.DJAM_DOMAIN_SCHEMA, settings.DJAM_DOMAIN,
-                                                 settings.DJAM_OPENID_PREFIX)
+    access_token_url = '{}://{}/{}/token'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
+                                                 provider.DJAM_OPENID_PREFIX)
+    authorize_url = '{}://{}/{}/authorize'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
+                                                  provider.DJAM_OPENID_PREFIX)
+    profile_url = '{}://{}/{}/userinfo'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
+                                               provider.DJAM_OPENID_PREFIX)
+    end_sesion = '{}://{}/{}/end-session'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
+                                                 provider.DJAM_OPENID_PREFIX)
 
     def complete_login(self, request, app, token, **kwargs):
         resp = requests.get(self.profile_url, params={
