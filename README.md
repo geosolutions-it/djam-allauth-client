@@ -21,3 +21,6 @@ To incorporate it in geonode:
  - Override allauth/logout.html template using one from lib
  - add djam_urlpatterns to geonode urls
  - add `'%s/djamauthprovider/*' % FORCE_SCRIPT_NAME` line to `AUTH_EXEMPT_URLS`
+ 
+ To run tests for this package:
+  - in django environment run: `python manage.py test djam_allauth_client`

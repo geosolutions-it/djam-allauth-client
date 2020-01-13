@@ -8,10 +8,10 @@ social_config = getattr(
     settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
 
 DJAM_DOMAIN = social_config.get('DJAM_DOMAIN', 'localhost:8800')
-DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN', 'http')
-DJAM_OPENID_PREFIX = social_config.get('DJAM_DOMAIN', 'openid')
-DJAM_PROVIDER_NAME = social_config.get('DJAM_DOMAIN', 'Mapstand signin service')
-DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_DOMAIN', 'oauth2server_sessionid')
+DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA', 'http')
+DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX', 'openid')
+DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME', 'Mapstand signin service')
+DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME', 'djam_sessionid')
 
 
 class DjamAccount(ProviderAccount):

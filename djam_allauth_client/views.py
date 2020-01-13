@@ -30,15 +30,11 @@ class DjamLogoutView(AllauthLogout):
         request = args[0]
         id_token = request.session.get('id_token')
         if id_token:
-            r = requests.get('{}/?id_token_hint={}'.format(self.adapter.end_sesion, id_token))
-            if r.status_code == status.HTTP_200_OK:
-                response = super(DjamLogoutView, self).post(*args, **kwargs)
-                if response.status_code == status.HTTP_302_FOUND:
-                    r = HttpResponseRedirect(settings.LOGIN_URL)
-                    r.delete_cookie(DJAM_SESSION_COOKIE_NAME)
-                    return r
-                else:
-                    return response
+            response = super(DjamLogoutView, self).post(*args, **kwargs)
+            if response.status_code == status.HTTP_302_FOUND:
+                return HttpResponseRedirect('{}/?id_token_hint={}'.format(self.adapter.end_sesion, id_token))
+            else:
+                return response
         else:
             return render(request, '500.html', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
