@@ -15,7 +15,7 @@ class DjamCallbackView(OAuth2CallbackView):
 
     def dispatch(self, request, *args, **kwargs):
         response = super(DjamCallbackView, self).dispatch(request, *args, **kwargs)
-        response.set_cookie(DJAM_SESSION_TOKEN_COOKIE, domain='localhost',value= request.session.get('session_token'))
+        response.set_cookie(DJAM_SESSION_TOKEN_COOKIE,value= request.session.get('session_token'))
         return response
 
 
