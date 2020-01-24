@@ -15,7 +15,7 @@ class DjamCallbackView(OAuth2CallbackView):
 
     def dispatch(self, request, *args, **kwargs):
         response = super(DjamCallbackView, self).dispatch(request, *args, **kwargs)
-        response.set_cookie(DJAM_SESSION_TOKEN_COOKIE, request.session.get('session_token'))
+        response.set_cookie(DJAM_SESSION_TOKEN_COOKIE, domain='localhost',value= request.session.get('session_token'))
         return response
 
 
@@ -39,9 +39,10 @@ class DjamLogoutView(AllauthLogout):
         id_token = request.session.get('id_token')
         if id_token:
             response = super(DjamLogoutView, self).post(*args, **kwargs)
-            response.delete_cookie(DJAM_SESSION_TOKEN_COOKIE)
             if response.status_code == status.HTTP_302_FOUND:
-                return HttpResponseRedirect('{}/?id_token_hint={}'.format(self.adapter.end_sesion, id_token))
+                r = HttpResponseRedirect('{}/?id_token_hint={}'.format(self.adapter.end_sesion, id_token))
+                r.set_cookie(DJAM_SESSION_TOKEN_COOKIE, max_age=1, value='')
+                return r
             else:
                 return response
         else:
