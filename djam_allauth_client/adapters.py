@@ -20,6 +20,7 @@ class DjamAdapter(OAuth2Adapter):
             'access_token': token.token
         })
         request.session['id_token'] = kwargs.get('response', {}).get('id_token')
+        request.session['session_token'] = kwargs.get('response', {}).get('session_token')
         extra_data = resp.json()
         return self.get_provider().sociallogin_from_response(
             request,

@@ -12,6 +12,7 @@ DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA', 'http')
 DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX', 'openid')
 DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME', 'Mapstand signin service')
 DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME', 'djam_sessionid')
+DJAM_SESSION_TOKEN_COOKIE = 'SESSION_TOKEN'
 
 
 class DjamAccount(ProviderAccount):
@@ -27,18 +28,15 @@ class DjamProvider(OAuth2Provider):
         return data.get('user_id')
 
     def extract_email_addresses(self, data):
-        return [EmailAddress(email=data['email'],
-                             verified=True,
-                             primary=True)]
+        return []
 
     def extract_common_fields(self, data):
         return dict(
             username=data['nickname'],
-            email=data['email'],
         )
 
     def get_default_scope(self):
-        scope = ['openid', 'email', 'profile', 'user_id']
+        scope = ['openid', 'profile', 'user_id']
         return scope
 
 
