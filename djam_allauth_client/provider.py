@@ -12,7 +12,7 @@ DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA', 'http')
 DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX', 'openid')
 DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME', 'Mapstand signin service')
 DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME', 'djam_sessionid')
-DJAM_SESSION_TOKEN_COOKIE = 'SESSION_TOKEN'
+DJAM_SESSION_TOKEN_COOKIE = 'djam_stk'
 
 
 class DjamAccount(ProviderAccount):
