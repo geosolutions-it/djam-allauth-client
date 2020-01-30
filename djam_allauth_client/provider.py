@@ -3,7 +3,6 @@ from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
 
-
 social_config = getattr(
     settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
 
@@ -35,10 +34,14 @@ class DjamProvider(OAuth2Provider):
             username=data['nickname'],
         )
 
+    def extract_user_claims(self, data):
+        return {
+            'groups': data.get('groups', [])
+        }
+
     def get_default_scope(self):
-        scope = ['openid', 'profile', 'user_id']
+        scope = ['openid', 'profile', 'user_id', 'groups']
         return scope
 
 
 provider_classes = [DjamProvider]
-
