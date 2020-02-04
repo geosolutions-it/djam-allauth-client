@@ -32,6 +32,8 @@ class DjamProvider(OAuth2Provider):
     def extract_common_fields(self, data):
         return dict(
             username=data['nickname'],
+            last_name=data['family_name'],
+            first_name=data['given_name']
         )
 
     def extract_user_claims(self, data):

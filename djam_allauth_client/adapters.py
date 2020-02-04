@@ -24,7 +24,12 @@ class DjamAdapter(OAuth2Adapter):
         extra_data = resp.json()
         p = self.get_provider()
         request.session['claims'] = p.extract_user_claims(extra_data)
-        return self.get_provider().sociallogin_from_response(
+        sociallogin = self.get_provider().sociallogin_from_response(
             request,
             extra_data
         )
+        # hack to automatically assign existing user with social account without additinal request of creation
+        if sociallogin.user.pk:
+            sociallogin.account.user = sociallogin.user.pk
+            sociallogin.account.save()
+        return sociallogin
