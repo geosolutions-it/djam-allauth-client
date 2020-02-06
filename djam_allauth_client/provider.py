@@ -1,17 +1,30 @@
-from allauth.account.models import EmailAddress
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+
 
 social_config = getattr(
     settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
 
-DJAM_DOMAIN = social_config.get('DJAM_DOMAIN', 'localhost:8800')
-DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA', 'http')
-DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX', 'openid')
-DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME', 'Mapstand signin service')
-DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME', 'djam_sessionid')
+DJAM_DOMAIN = social_config.get('DJAM_DOMAIN')
+DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA')
+DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX')
+DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME')
+DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME')
 DJAM_SESSION_TOKEN_COOKIE = 'djam_stk'
+
+
+if not DJAM_DOMAIN:
+    raise ImproperlyConfigured('DJAM_DOMAIN is missing in env vars')
+if not DJAM_DOMAIN_SCHEMA:
+    raise ImproperlyConfigured('DJAM_DOMAIN_SCHEMA is missing in env vars')
+if not DJAM_OPENID_PREFIX:
+    raise ImproperlyConfigured('DJAM_OPENID_PREFIX is missing in env vars')
+if not DJAM_OPENID_PREFIX:
+    raise ImproperlyConfigured('DJAM_OPENID_PREFIX is missing in env vars')
+if not DJAM_SESSION_COOKIE_NAME:
+    raise ImproperlyConfigured('DJAM_SESSION_COOKIE_NAME is missing in env vars')
 
 
 class DjamAccount(ProviderAccount):
@@ -42,7 +55,7 @@ class DjamProvider(OAuth2Provider):
         }
 
     def get_default_scope(self):
-        scope = ['openid', 'profile', 'user_id', 'groups']
+        scope = ['openid', 'profile', 'user_id', 'groups', 'legacy_user_id']
         return scope
 
 
