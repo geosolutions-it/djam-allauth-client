@@ -2,7 +2,46 @@ import requests
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
 from djam_allauth_client.provider import DjamProvider
 from djam_allauth_client import provider
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from django.contrib.auth import get_user_model
+from allauth.account.adapter import get_adapter
 
+class AccountSocialAdapter(DefaultSocialAccountAdapter):
+
+    def is_auto_signup_allowed(self, request, sociallogin):
+        """
+        This is potentially dangerous.
+        It is created to skipp additinal request to create user during first remote user login
+        """
+        return True
+
+    def populate_user(self,
+                      request,
+                      sociallogin,
+                      data):
+        user = super(AccountSocialAdapter, self).populate_user(
+            request, sociallogin, data)
+        user.last_name = data.get('last_name')
+        user.first_name = data.get('first_name')
+        return user
+
+    def new_user(self, request, sociallogin):
+        username = sociallogin.account.extra_data.get('nickname')
+        UserModel = get_user_model()
+        return UserModel(username=username)
+
+    def save_user(self, request, sociallogin, form=None):
+        """
+        Creates new user instance, or match existing one with social account and invalidate password
+        """
+        UserModel = get_user_model()
+        user_id = sociallogin.account.extra_data.get('legacy_user_id')
+        try:
+            legacy_user = UserModel.objects.get(pk=user_id)
+            legacy_user.set_unusable_password()
+            return sociallogin.connect(request, legacy_user)
+        except UserModel.DoesNotExist:
+            return super(AccountSocialAdapter, self).save_user(request, sociallogin)
 
 class DjamAdapter(OAuth2Adapter):
     provider_id = DjamProvider.id
@@ -28,8 +67,4 @@ class DjamAdapter(OAuth2Adapter):
             request,
             extra_data
         )
-        # hack to automatically assign existing user with social account without additinal request of creation
-        if sociallogin.user.pk:
-            sociallogin.account.user = sociallogin.user.pk
-            sociallogin.account.save()
         return sociallogin
