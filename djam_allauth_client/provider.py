@@ -26,7 +26,7 @@ if not DJAM_OPENID_PREFIX:
     raise ImproperlyConfigured('DJAM_OPENID_PREFIX is missing in env vars')
 if not DJAM_SESSION_COOKIE_NAME:
     raise ImproperlyConfigured('DJAM_SESSION_COOKIE_NAME is missing in env vars')
-if not DJAM_AUTO_LOGOUT:
+if DJAM_AUTO_LOGOUT is None:
     raise ImproperlyConfigured('DJAM_AUTO_LOGOUT is missing in env vars')
 
 
