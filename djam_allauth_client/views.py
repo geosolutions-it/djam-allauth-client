@@ -34,6 +34,9 @@ class DjamLogoutView(AllauthLogout):
 
         return view
 
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
     def post(self, *args, **kwargs):
         request = args[0]
         id_token = request.session.get('id_token')
