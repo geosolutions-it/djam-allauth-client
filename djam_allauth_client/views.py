@@ -8,7 +8,7 @@ from django.http import HttpResponseServerError, HttpResponseRedirect
 from rest_framework import status
 from django.conf import settings
 
-from djam_allauth_client.provider import DJAM_SESSION_COOKIE_NAME, DJAM_SESSION_TOKEN_COOKIE
+from djam_allauth_client.provider import DJAM_SESSION_COOKIE_NAME, DJAM_SESSION_TOKEN_COOKIE, DJAM_AUTO_LOGOUT
 
 
 class DjamCallbackView(OAuth2CallbackView):
@@ -33,6 +33,12 @@ class DjamLogoutView(AllauthLogout):
                 return e.response
 
         return view
+
+    def get(self, *args, **kwargs):
+        if DJAM_AUTO_LOGOUT:
+            return self.post(*args, **kwargs)
+        return super(DjamLogoutView, self).get(*args, **kwargs)
+
 
     def post(self, *args, **kwargs):
         request = args[0]
