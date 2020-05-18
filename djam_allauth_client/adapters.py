@@ -23,6 +23,8 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
             request, sociallogin, data)
         user.last_name = data.get('last_name')
         user.first_name = data.get('first_name')
+        user.is_superuser = data.get('is_admin')
+        user.is_staff = data.get('is_admin')
         return user
 
     def new_user(self, request, sociallogin):
