@@ -49,7 +49,9 @@ class DjamProvider(OAuth2Provider):
         return dict(
             username=data['nickname'],
             last_name=data['family_name'],
-            first_name=data['given_name']
+            first_name=data['given_name'],
+            is_admin=data['is_admin'],
+            is_staff=data['is_staff']
         )
 
     def extract_user_claims(self, data):
@@ -58,7 +60,7 @@ class DjamProvider(OAuth2Provider):
         }
 
     def get_default_scope(self):
-        scope = ['openid', 'profile', 'user_id', 'groups', 'legacy_user_id']
+        scope = ['openid', 'profile', 'user_id', 'groups', 'legacy_user_id', 'is_admin', 'is_staff']
         return scope
 
 
