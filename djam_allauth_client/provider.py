@@ -16,20 +16,6 @@ DJAM_AUTO_LOGOUT = social_config.get('DJAM_AUTO_LOGOUT')
 DJAM_SESSION_TOKEN_COOKIE = 'djam_stk'
 
 
-if not DJAM_DOMAIN:
-    raise ImproperlyConfigured('DJAM_DOMAIN is missing in env vars')
-if not DJAM_DOMAIN_SCHEMA:
-    raise ImproperlyConfigured('DJAM_DOMAIN_SCHEMA is missing in env vars')
-if not DJAM_OPENID_PREFIX:
-    raise ImproperlyConfigured('DJAM_OPENID_PREFIX is missing in env vars')
-if not DJAM_OPENID_PREFIX:
-    raise ImproperlyConfigured('DJAM_OPENID_PREFIX is missing in env vars')
-if not DJAM_SESSION_COOKIE_NAME:
-    raise ImproperlyConfigured('DJAM_SESSION_COOKIE_NAME is missing in env vars')
-if DJAM_AUTO_LOGOUT is None:
-    raise ImproperlyConfigured('DJAM_AUTO_LOGOUT is missing in env vars')
-
-
 class DjamAccount(ProviderAccount):
     pass
 
