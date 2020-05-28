@@ -14,6 +14,7 @@ DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME')
 DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME')
 DJAM_AUTO_LOGOUT = social_config.get('DJAM_AUTO_LOGOUT')
 DJAM_SESSION_TOKEN_COOKIE = 'djam_stk'
+DJAM_POST_LOGOUT_URL = social_config.get('DJAM_POST_LOGOUT_URL')
 
 
 class DjamAccount(ProviderAccount):
