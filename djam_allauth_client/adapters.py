@@ -4,7 +4,10 @@ from djam_allauth_client.provider import DjamProvider
 from djam_allauth_client import provider
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth import get_user_model
-from allauth.account.adapter import get_adapter
+
+
+class SocialAccountException(Exception):
+    pass
 
 class AccountSocialAdapter(DefaultSocialAccountAdapter):
 
@@ -26,6 +29,15 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
         user.is_superuser = data.get('is_admin')
         user.is_staff = data.get('is_staff')
         return user
+
+    def authentication_error(self,
+                             request,
+                             provider_id,
+                             error=None,
+                             exception=None,
+                             extra_context=None):
+        raise SocialAccountException(exception) from exception
+
 
     def new_user(self, request, sociallogin):
         username = sociallogin.account.extra_data.get('nickname')
