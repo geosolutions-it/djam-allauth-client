@@ -1,7 +1,6 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 
 
 social_config = getattr(
@@ -38,7 +37,8 @@ class DjamProvider(OAuth2Provider):
             last_name=data['family_name'],
             first_name=data['given_name'],
             is_admin=data['is_admin'],
-            is_staff=data['is_staff']
+            is_staff=data['is_staff'],
+            email = data['email']
         )
 
     def extract_user_claims(self, data):
@@ -47,7 +47,7 @@ class DjamProvider(OAuth2Provider):
         }
 
     def get_default_scope(self):
-        scope = ['openid', 'profile', 'user_id', 'groups', 'legacy_user_id', 'is_admin', 'is_staff']
+        scope = ['openid', 'profile', 'user_id', 'groups', 'legacy_user_id', 'is_admin', 'is_staff', 'email']
         return scope
 
 
