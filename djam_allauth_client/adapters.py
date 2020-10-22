@@ -1,10 +1,13 @@
 import requests
+import logging
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
 from djam_allauth_client.provider import DjamProvider
 from djam_allauth_client import provider
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth import get_user_model
+from allauth.socialaccount.models import SocialAccount
 
+logger = logging.getLogger(__name__)
 
 class SocialAccountException(Exception):
     pass
@@ -28,7 +31,22 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
         user.first_name = data.get('first_name')
         user.is_superuser = data.get('is_admin')
         user.is_staff = data.get('is_staff')
+
+        # above user variable will be persisted only if its new.
+        # so its not enough to update user data on each login.
+        # _update_existing_user will force update
+        self._update_existing_user(sociallogin, data)
         return user
+
+    def _update_existing_user(self, sociallogin, data):
+        try:
+            a = SocialAccount.objects.get(uid=sociallogin.account.uid)
+            a.user.last_name = data.get('last_name')
+            a.user.first_name = data.get('first_name')
+            a.user.email = data.get('email')
+            a.user.save()
+        except SocialAccount.DoesNotExist:
+            pass
 
     def authentication_error(self,
                              request,
