@@ -1,16 +1,23 @@
 import requests
 import logging
-from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
+
 from djam_allauth_client.provider import DjamProvider
 from djam_allauth_client import provider
+
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from django.contrib.auth import get_user_model
+from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
 from allauth.socialaccount.models import SocialAccount
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
 
 logger = logging.getLogger(__name__)
 
+
 class SocialAccountException(Exception):
     pass
+
 
 class AccountSocialAdapter(DefaultSocialAccountAdapter):
 
@@ -68,12 +75,17 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
         """
         UserModel = get_user_model()
         user_id = sociallogin.account.extra_data.get('legacy_user_id')
-        try:
-            legacy_user = UserModel.objects.get(pk=user_id)
-            legacy_user.set_unusable_password()
-            return sociallogin.connect(request, legacy_user)
-        except UserModel.DoesNotExist:
+        match_legacy_users = getattr(settings, 'DJAM_MATCH_LEGACY_USERS', False)
+        if match_legacy_users:
+            try:
+                legacy_user = UserModel.objects.get(pk=user_id)
+                legacy_user.set_unusable_password()
+                return sociallogin.connect(request, legacy_user)
+            except UserModel.DoesNotExist:
+                return super(AccountSocialAdapter, self).save_user(request, sociallogin)
+        else:
             return super(AccountSocialAdapter, self).save_user(request, sociallogin)
+
 
 class DjamAdapter(OAuth2Adapter):
     provider_id = DjamProvider.id
