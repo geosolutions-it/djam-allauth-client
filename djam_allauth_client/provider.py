@@ -1,14 +1,12 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
+from djam_allauth_client.adapters import DjamAdapter
 
 
 social_config = getattr(
     settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
 
-DJAM_DOMAIN = social_config.get('DJAM_DOMAIN')
-DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA')
-DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX')
 DJAM_PROVIDER_NAME = social_config.get('DJAM_PROVIDER_NAME')
 DJAM_SESSION_COOKIE_NAME = social_config.get('DJAM_SESSION_COOKIE_NAME')
 DJAM_AUTO_LOGOUT = social_config.get('DJAM_AUTO_LOGOUT')
@@ -24,7 +22,8 @@ class DjamProvider(OAuth2Provider):
     id = 'djamauthprovider'
     name = DJAM_PROVIDER_NAME
     account_class = DjamAccount
-
+    oauth2_adapter_class = DjamAdapter
+    
     def extract_uid(self, data):
         return data.get('user_id')
 

@@ -1,8 +1,6 @@
 import requests
 import logging
 
-from djam_allauth_client.provider import DjamProvider
-from djam_allauth_client import provider
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter
@@ -14,6 +12,12 @@ from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
 
+social_config = getattr(
+    settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('djam', {})
+
+DJAM_DOMAIN = social_config.get('DJAM_DOMAIN')
+DJAM_DOMAIN_SCHEMA = social_config.get('DJAM_DOMAIN_SCHEMA')
+DJAM_OPENID_PREFIX = social_config.get('DJAM_OPENID_PREFIX')
 
 class SocialAccountException(Exception):
     pass
@@ -88,15 +92,15 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
 
 
 class DjamAdapter(OAuth2Adapter):
-    provider_id = DjamProvider.id
-    access_token_url = '{}://{}/{}/token'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
-                                                 provider.DJAM_OPENID_PREFIX)
-    authorize_url = '{}://{}/{}/authorize'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
-                                                  provider.DJAM_OPENID_PREFIX)
-    profile_url = '{}://{}/{}/userinfo'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
-                                               provider.DJAM_OPENID_PREFIX)
-    end_sesion = '{}://{}/{}/end-session'.format(provider.DJAM_DOMAIN_SCHEMA, provider.DJAM_DOMAIN,
-                                                 provider.DJAM_OPENID_PREFIX)
+    provider_id = "djamauthprovider"
+    access_token_url = '{}://{}/{}/token'.format(DJAM_DOMAIN_SCHEMA, DJAM_DOMAIN,
+                                                 DJAM_OPENID_PREFIX)
+    authorize_url = '{}://{}/{}/authorize'.format(DJAM_DOMAIN_SCHEMA, DJAM_DOMAIN,
+                                                  DJAM_OPENID_PREFIX)
+    profile_url = '{}://{}/{}/userinfo'.format(DJAM_DOMAIN_SCHEMA, DJAM_DOMAIN,
+                                               DJAM_OPENID_PREFIX)
+    end_sesion = '{}://{}/{}/end-session'.format(DJAM_DOMAIN_SCHEMA, DJAM_DOMAIN,
+                                                 DJAM_OPENID_PREFIX)
 
     def complete_login(self, request, app, token, **kwargs):
         resp = requests.get(self.profile_url, params={
