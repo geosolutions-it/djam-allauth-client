@@ -51,6 +51,7 @@ class AccountSocialAdapter(DefaultSocialAccountAdapter):
             a.user.last_name = data.get('last_name')
             a.user.first_name = data.get('first_name')
             a.user.email = data.get('email')
+            a.user.username = data.get('username')
             a.user.save()
         except SocialAccount.DoesNotExist:
             pass
