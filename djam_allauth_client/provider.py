@@ -1,6 +1,7 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 from django.conf import settings
+from djam_allauth_client.adapters import DjamAdapter
 
 
 social_config = getattr(
@@ -24,9 +25,11 @@ class DjamProvider(OAuth2Provider):
     id = 'djamauthprovider'
     name = DJAM_PROVIDER_NAME
     account_class = DjamAccount
+    oauth2_adapter_class = DjamAdapter
 
     def extract_uid(self, data):
-        return data.get('user_id')
+        uid = data.get('user_id')
+        return str(uid) if uid is not None else None
 
     def extract_email_addresses(self, data):
         return []
